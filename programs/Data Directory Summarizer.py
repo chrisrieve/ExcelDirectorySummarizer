@@ -73,17 +73,22 @@ for sheet in xls.sheet_names:
     print sheet
     try:
         df = xls.parse(sheet)
-        sheet_rows = len(df.index)
-#        will need to change data_file[0] to a reference to current wb
-        workbook = os.path.split(data_files[0])[1]
-        wb_size = readablebytes.humanize_bytes(os.path.getsize(data_files[0]))
-        num_sheets = len(xls.sheet_names)
-        sheet_name = sheet
-        c.execute('''INSERT INTO excel_sheets([c[0] for c in column_names[:5]])
-                    VALUES(?,?,?,?,?)''',(workbook, num_sheets, sheet_name,
-                    sheet_rows, wb_size))
     except:
         continue
+    sheet_rows = len(df.index)
+#        will need to change data_file[0] to a reference to current wb
+    workbook = os.path.split(data_files[0])[1]
+    wb_size = readablebytes.humanize_bytes(os.path.getsize(data_files[0]))
+    num_sheets = len(xls.sheet_names)
+    sheet_name = sheet
+#    c.execute('''INSERT INTO excel_sheets([c[0] for c in column_names[:5]])
+#                VALUES(?,?,?,?,?)''',(workbook, num_sheets, sheet_name,
+#                sheet_rows, wb_size))
+    c.execute('''INSERT INTO excel_sheets([c[0] for c in column_names[:5]])
+                VALUES(?,?,?,?,?)''',(workbook, num_sheets, sheet_name,
+                sheet_rows, wb_size))
+    
+
 conn.commit()
 conn.close()
     
