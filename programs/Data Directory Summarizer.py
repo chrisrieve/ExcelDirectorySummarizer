@@ -5,15 +5,20 @@ Created on Thu Jul 14 15:22:58 2016
 @author: Christopher.Rieve
 
 Goal: Create a python program template to grab all excel files and various
-      information that may prove helpful 
+      information that may prove helpful
+ToDo:   1. Make paths relative
+        2.   
 """
 
-import os 
-import pandas as pd 
+import os
+import pandas as pd
 import sqlite3
 import readablebytes
 
-rootdir = r'C:\Users\christopher.rieve\NERA\Projects\Excel Directory Summarizer'
+# Windows
+# rootdir = r'C:\Users\christopher.rieve\NERA\Projects\Excel Directory Summarizer'
+# Mac
+rootdir = '/Users/chrisrieve/Dropbox/File Cabinet/Python/Projects/ExcelDirectorySummarizer'
 os.chdir(rootdir)
 data_folder = rootdir + '\source'
 data_files = []
@@ -52,7 +57,7 @@ c.execute('CREATE TABLE {tn} ({nf} {ft})'\
 conn.commit()
 conn.close()
 
-# adding additional rows to sqlite db 
+# adding additional rows to sqlite db
 conn = sqlite3.connect(sqlite_file)
 c = conn.cursor()
 
@@ -64,7 +69,7 @@ for col in column_names[1:]:
     c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ct} DEFAULT '{df}'"\
             .format(tn=table_name, cn=new_field, ct=field_type, df=default_val))
 conn.commit()
-conn.close()    
+conn.close()
 
 # Time to add data to the table
 conn = sqlite3.connect(sqlite_file)
@@ -84,23 +89,23 @@ for sheet in xls.sheet_names:
 #    c.execute('''INSERT INTO excel_sheets([c[0] for c in column_names[:5]])
 #                VALUES(?,?,?,?,?)''',(workbook, num_sheets, sheet_name,
 #                sheet_rows, wb_size))
-    c.execute('''INSERT INTO excel_sheets([c[0] for c in column_names[:5]])
+    c.execute('''INSERT INTO excel_sheets
                 VALUES(?,?,?,?,?)''',(workbook, num_sheets, sheet_name,
                 sheet_rows, wb_size))
-    
+
 
 conn.commit()
 conn.close()
-    
+
 xls.sheet_names
 
 named_sheets = xls.sheet_names
 num_sheets = 0
 for sheet in named_sheets:
     print sheet
-    try:    
+    try:
         df = xls.parse(sheet)
         num_sheets += 1
     except:
         continue
-print num_sheets 
+print num_sheets
