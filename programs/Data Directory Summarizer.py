@@ -7,7 +7,7 @@ Created on Thu Jul 14 15:22:58 2016
 Goal: Create a python program template to grab all excel files and various
       information that may prove helpful
 ToDo:   1. Make paths relative
-        2.   
+        2.
 """
 
 import os
@@ -20,7 +20,10 @@ import readablebytes
 # Mac
 rootdir = '/Users/chrisrieve/Dropbox/File Cabinet/Python/Projects/ExcelDirectorySummarizer'
 os.chdir(rootdir)
-data_folder = rootdir + '\source'
+# Mac
+data_folder = rootdir + '/source'
+# Windows
+# data_folder = rootdir + '\source'
 data_files = []
 for subdir, dirs, files in os.walk(data_folder):
     for file in files:
@@ -86,12 +89,13 @@ for sheet in xls.sheet_names:
     wb_size = readablebytes.humanize_bytes(os.path.getsize(data_files[0]))
     num_sheets = len(xls.sheet_names)
     sheet_name = sheet
-#    c.execute('''INSERT INTO excel_sheets([c[0] for c in column_names[:5]])
-#                VALUES(?,?,?,?,?)''',(workbook, num_sheets, sheet_name,
-#                sheet_rows, wb_size))
-    c.execute('''INSERT INTO excel_sheets
-                VALUES(?,?,?,?,?)''',(workbook, num_sheets, sheet_name,
-                sheet_rows, wb_size))
+    c.execute('''INSERT INTO excel_sheets('Workbook','# sheets','Sheetname',
+                 'rows','Workbook size' )
+                 VALUES(?,?,?,?,?)''',(workbook, num_sheets,
+                 sheet_name,sheet_rows, wb_size))
+    # c.execute('''INSERT INTO excel_sheets
+    #             VALUES(?,?,?,?,?,?,?)''',(workbook, num_sheets, sheet_name,
+    #             sheet_rows, wb_size))
 
 
 conn.commit()
@@ -109,3 +113,5 @@ for sheet in named_sheets:
     except:
         continue
 print num_sheets
+
+,'Useful(1-5)','description')
