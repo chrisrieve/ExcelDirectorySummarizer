@@ -13,22 +13,22 @@ Notes: worksheet.write(0, 0, "I'm sheet number %d" % (i + 1)) <-- Could come in
 """
 # pylint: disable=C0103
 
+
 import os
-import pandas as pd
 import sqlite3
+import pandas as pd
 import readablebytes
 import xlsxwriter
 
 # Windows
-rootdir = r'C:\Users\christopher.rieve\NERA\Projects\Excel Directory Summarizer'
+# rootdir = r'C:\Users\christopher.rieve\NERA\Projects\Excel Directory Summarizer'
 # Mac
-# rootdir = '/Users/chrisrieve/Dropbox/File
-# Cabinet/Python/Projects/ExcelDirectorySummarizer'
+rootdir = '/Users/chrisrieve/Dropbox/File Cabinet/Python/Projects/ExcelDirectorySummarizer'
 os.chdir(rootdir)
 # Mac
-# data_folder = rootdir + '/source'
+data_folder = rootdir + '/source'
 # Windows
-data_folder = rootdir + r'\source'
+# data_folder = rootdir + r'\source'
 data_files = []
 for subdir, dirs, files in os.walk(data_folder):
     for f in files:
@@ -84,10 +84,10 @@ for f in data_files:
         conn = sqlite3.connect(sqlite_file)
         c = conn.cursor()
         try:
-            df = xls.parse(sheet)
-        except:
-            continue
-        sheet_rows = len(df.index)
+            excel_frame = xls.parse(sheet)
+        except ValueError as err:
+            print err.args
+        sheet_rows = len(excel_frame.index)
         workbook_name = os.path.split(f)[1]
         wb_size = readablebytes.humanize_bytes(os.path.getsize(f))
         num_sheets = len(xls.sheet_names)
