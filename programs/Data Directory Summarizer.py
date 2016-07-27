@@ -6,11 +6,12 @@ Created on Thu Jul 14 15:22:58 2016
 
 Goal: Create a python program template to grab all excel files and various
       information that may prove helpful
-ToDo:   - Make paths relative
-        - Remove rows with zero columns and rows
-        - Make right click menu option
+ToDo:
+        - Make paths relative
         - Rewrite functionally
-        - Add column headers in excel sheet
+        - Add classes
+        - Make right click menu option
+        - Remove rows with zero columns and rows
 Notes: worksheet.write(0, 0, "I'm sheet number %d" % (i + 1)) <-- Could come in
        handy later.
 """
@@ -25,7 +26,7 @@ import xlrd
 import xlsxwriter
 
 # Windows
-rootdir = r'C:\Users\christopher.rieve\NERA\Projects\Excel Directory Summarizer'
+rootdir = r'C:\Users\christopher.rieve\Personal\Projects\Excel Directory Summarizer'
 # Mac
 # rootdir = '/Users/chrisrieve/Dropbox/File
 # Cabinet/Python/Projects/ExcelDirectorySummarizer'
@@ -111,8 +112,12 @@ c = conn.cursor()
 workbook = xlsxwriter.Workbook('output/Summary of Files.xlsx')
 worksheet = workbook.add_worksheet('Data Summary')
 mysel = c.execute("SELECT * FROM excel_sheets")
+names = [description[0] for description in mysel.description]
+for j, name in enumerate(names):
+    print name
+    worksheet.write(0, j, name)
 for i, row in enumerate(mysel):
     print row
     for j, value in enumerate(row):
-        worksheet.write(i, j, value)
+        worksheet.write(i + 1, j, value)
 workbook.close()
